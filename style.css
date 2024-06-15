@@ -1,9 +1,9 @@
 body {
   margin: 0;
   padding: 0;
-  background: #f2f2f2;
+  background: url('sky-nature-atmosphere-astronomical-object-night-star-893832-wallhere.com.jpg') no-repeat center center fixed;
+  background-size: cover;
   font-family: "Acme";
-  background-image:url(sky-nature-atmosphere-astronomical-object-night-star-893832-wallhere.com.jpg);
 }
 
 .container {
@@ -68,7 +68,7 @@ body {
   margin: 0;
   padding: 0.5em 0;
   text-transform: uppercase;
-  font-family:cursive ;
+  font-family: cursive;
   font-size: 1.7em;
   background: linear-gradient(to right, #f32170, #ff0c08, #710071, #eedd44);
   -webkit-text-fill-color: transparent;
