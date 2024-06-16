@@ -36,9 +36,13 @@
                <h5 align="right">---Vishal (Taabir)</h5> 
             </div>
         </div>
+        <div class="cliparts-container">
+            <img src="ggj.gif" alt="Star" class="clipart" id="clipart-1">
+        </div>
     </div>
-    <audio id="hover-audio" src="Y2meta.app - Send This to Your Friend on Their Birthday (320 kbps).mp3"></audio>
     <audio id="page-audio" src="spotifydown.com - Just the Way You Are.mp3"></audio>
+    <audio id="hover-audio" src="Y2meta.app - Send This to Your Friend on Their Birthday (320 kbps).mp3"></audio>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
     <script>
         function playPageAudio() {
             const pageAudio = document.getElementById('page-audio');
@@ -55,6 +59,7 @@
             hoverAudio.play();
             document.getElementById('page-audio').pause();
             showCliparts();
+            launchConfetti();
         });
 
         hoverCard.addEventListener('mouseout', () => {
@@ -77,6 +82,14 @@
             const cliparts = document.querySelectorAll('.clipart');
             cliparts.forEach(clipart => {
                 clipart.classList.remove('visible');
+            });
+        }
+
+        function launchConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
             });
         }
     </script>
