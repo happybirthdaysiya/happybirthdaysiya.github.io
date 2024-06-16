@@ -4,56 +4,214 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mooooon</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('sky-nature-atmosphere-astronomical-object-night-star-893832-wallhere.com.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: "Acme";
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            position: relative;
+            height: 600px; /* Set a height to the container */
+        }
+
+        button {
+            align-self: top;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button img {
+            width: 150px; /* Adjust the size as needed */
+            height: auto;
+            transition: transform 0.3s;
+        }
+
+        button img:hover {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            text-shadow: 2px;
+            text-decoration-color: #25235d;
+            color: #72dcea; /* Change this color to your preferred color */
+            font-size: 2em;
+            text-align: center;
+            margin-top: 20px;
+            transition: opacity 0.5s; /* Added transition for fade effect */
+        }
+
+        .fade-out {
+            opacity: 0; /* Apply opacity 0 for fade out */
+        }
+
+        #rocket {
+            position: absolute;
+            width: 50px;
+            bottom: 10px; /* Start at the bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            transition: top 0.1s, left 0.1s;
+        }
+
+        #explosion {
+            position: absolute;
+            display: none;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .controls button {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px solid #000;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <button id="image-button">
             <img src="hh.png" alt="Button Image">
         </button>
+        <h1 id="message" align="center">
+            <p>How can this be possible?? <br>The day you were born everything was so beautiful like this moon!!!!!<br>Can you help me to reach that "MOON"</p>
+        </h1>
         <img id="rocket" src="startup_272357.png" alt="Rocket">
-        <img id="explosion" src="explosion.gif" alt="Explosion" style="display: none;">
+        <img id="explosion" src="jeong43va.gif" alt="Explosion" width="150px">
     </div>
-    <h1 align="center"><p>How can this be possible?? <br>The day you were born everything was so beautiful like this moon!!!!!<br>Can you help me to reach that "MOON"</p></h1>
+    
+
+    <!-- Control Buttons for Mobile -->
+    <div class="controls">
+        <button id="up">⬆️</button>
+        <div>
+            <button id="left">⬅️</button>
+            <button id="down">⬇️</button>
+            <button id="right">➡️</button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const rocket = document.getElementById('rocket');
             const moonButton = document.getElementById('image-button');
             const explosion = document.getElementById('explosion');
+            const message = document.getElementById('message');
+            let messageFadedOut = false;
 
-            rocket.style.position = 'absolute';
-            rocket.style.bottom = '10px';
-            rocket.style.left = '50%';
-            rocket.style.transform = 'translateX(-50%)';
+            const moveRocket = (direction) => {
+                const rocketRect = rocket.getBoundingClientRect();
+                const moonRect = moonButton.getBoundingClientRect();
+                const containerRect = document.querySelector('.container').getBoundingClientRect();
 
-            document.addEventListener('keydown', moveRocket);
+                switch (direction) {
+                    case 'up':
+                        if (rocketRect.top - 10 > containerRect.top) {
+                            rocket.style.top = `${rocketRect.top - 10 - containerRect.top}px`;
+                        }
+                        break;
+                    case 'down':
+                        if (rocketRect.bottom + 10 < containerRect.bottom) {
+                            rocket.style.top = `${rocketRect.top + 10 - containerRect.top}px`;
+                        }
+                        break;
+                    case 'left':
+                        if (rocketRect.left - 10 > containerRect.left) {
+                            rocket.style.left = `${rocketRect.left - 10 - containerRect.left}px`;
+                        }
+                        break;
+                    case 'right':
+                        if (rocketRect.right + 10 < containerRect.right) {
+                            rocket.style.left = `${rocketRect.right + 10 - containerRect.left}px`;
+                        }
+                        break;
+                }
+
+                checkCollision();
+            };
+
+            const checkCollision = () => {
+                const rocketRect = rocket.getBoundingClientRect();
+                const moonRect = moonButton.getBoundingClientRect();
+
+                if (rocketRect.right > moonRect.left &&
+                    rocketRect.left < moonRect.right &&
+                    rocketRect.bottom > moonRect.top &&
+                    rocketRect.top < moonRect.bottom) {
+                    
+                    // Show explosion animation
+                    explosion.style.display = 'block';
+                    explosion.style.top = `${moonRect.top}px`; // Align explosion with the moon's top
+                    explosion.style.left = `${moonRect.left}px`; // Align explosion with the moon's left
+
+                    // Hide rocket and moon
+                    rocket.style.display = 'none';
+                    moonButton.style.display = 'none';
+
+                    // Fade out the message
+                    message.classList.add('fade-out');
+
+                    // Redirect after explosion animation
+                    setTimeout(() => {
+                        window.location.href = 'gg.html';
+                    }, 2000); // Adjust the duration to match the explosion animation
+                }
+            };
+
+            document.addEventListener('keydown', (event) => {
+                if (!messageFadedOut) {
+                    message.classList.add('fade-out');
+                    messageFadedOut = true;
+                }
+                switch (event.key) {
+                    case 'ArrowUp':
+                        moveRocket('up');
+                        break;
+                    case 'ArrowDown':
+                        moveRocket('down');
+                        break;
+                    case 'ArrowLeft':
+                        moveRocket('left');
+                        break;
+                    case 'ArrowRight':
+                        moveRocket('right');
+                        break;
+                }
+            });
+
+            document.getElementById('up').addEventListener('click', () => moveRocket('up'));
+            document.getElementById('down').addEventListener('click', () => moveRocket('down'));
+            document.getElementById('left').addEventListener('click', () => moveRocket('left'));
+            document.getElementById('right').addEventListener('click', () => moveRocket('right'));
+
             document.addEventListener('touchstart', handleTouchStart, false);
             document.addEventListener('touchmove', handleTouchMove, false);
 
             let touchStartX = null;
             let touchStartY = null;
-
-            function moveRocket(event) {
-                const rocketRect = rocket.getBoundingClientRect();
-                const moonRect = moonButton.getBoundingClientRect();
-
-                switch (event.key) {
-                    case 'ArrowUp':
-                        rocket.style.top = `${rocketRect.top - 10}px`;
-                        break;
-                    case 'ArrowDown':
-                        rocket.style.top = `${rocketRect.top + 10}px`;
-                        break;
-                    case 'ArrowLeft':
-                        rocket.style.left = `${rocketRect.left - 10}px`;
-                        break;
-                    case 'ArrowRight':
-                        rocket.style.left = `${rocketRect.right + 10}px`;
-                        break;
-                }
-
-                checkCollision(rocketRect, moonRect);
-            }
 
             function handleTouchStart(event) {
                 const firstTouch = event.touches[0];
@@ -72,56 +230,26 @@
                 const diffX = touchStartX - touchEndX;
                 const diffY = touchStartY - touchEndY;
 
-                const rocketRect = rocket.getBoundingClientRect();
-                const moonRect = moonButton.getBoundingClientRect();
-
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (diffX > 0) {
                         // Swipe left
-                        rocket.style.left = `${rocketRect.left - 10}px`;
+                        moveRocket('left');
                     } else {
                         // Swipe right
-                        rocket.style.left = `${rocketRect.right + 10}px`;
+                        moveRocket('right');
                     }
                 } else {
                     if (diffY > 0) {
                         // Swipe up
-                        rocket.style.top = `${rocketRect.top - 10}px`;
+                        moveRocket('up');
                     } else {
                         // Swipe down
-                        rocket.style.top = `${rocketRect.top + 10}px`;
+                        moveRocket('down');
                     }
                 }
 
                 touchStartX = null;
                 touchStartY = null;
-
-                checkCollision(rocketRect, moonRect);
-            }
-
-            function checkCollision(rocketRect, moonRect) {
-                const updatedRocketRect = rocket.getBoundingClientRect();
-
-                if (updatedRocketRect.right > moonRect.left &&
-                    updatedRocketRect.left < moonRect.right &&
-                    updatedRocketRect.bottom > moonRect.top &&
-                    updatedRocketRect.top < moonRect.bottom) {
-                    
-                    // Show explosion animation
-                    explosion.style.display = 'block';
-                    explosion.style.position = 'absolute';
-                    explosion.style.top = `${moonRect.top}px`;
-                    explosion.style.left = `${moonRect.left}px`;
-
-                    // Hide rocket and moon
-                    rocket.style.display = 'none';
-                    moonButton.style.display = 'none';
-
-                    // Redirect after explosion animation
-                    setTimeout(() => {
-                        window.location.href = 'gg.html';
-                    }, 2000); // Adjust the duration to match the explosion animation
-                }
             }
         });
     </script>
