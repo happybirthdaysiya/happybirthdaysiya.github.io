@@ -11,20 +11,29 @@
         <button id="image-button">
             <img src="hh.png" alt="Button Image">
         </button>
-        <img id="rocket" src="startup_272357.png" alt="Rocket" width="50">
+        <img id="rocket" src="startup_272357.png" alt="Rocket">
+        <img id="explosion" src="explosion.gif" alt="Explosion" style="display: none;">
     </div>
-    <h1 align="center"><p>How can this be possible?? <br>The day you were born everything was so beautiful like this moon!!!!!<br>can you help me to reach that "MOON"</p></h1>
+    <h1 align="center"><p>How can this be possible?? <br>The day you were born everything was so beautiful like this moon!!!!!<br>Can you help me to reach that "MOON"</p></h1>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const rocket = document.getElementById('rocket');
             const moonButton = document.getElementById('image-button');
+            const explosion = document.getElementById('explosion');
 
             rocket.style.position = 'absolute';
             rocket.style.bottom = '10px';
             rocket.style.left = '50%';
             rocket.style.transform = 'translateX(-50%)';
 
-            document.addEventListener('keydown', (event) => {
+            document.addEventListener('keydown', moveRocket);
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchmove', handleTouchMove, false);
+
+            let touchStartX = null;
+            let touchStartY = null;
+
+            function moveRocket(event) {
                 const rocketRect = rocket.getBoundingClientRect();
                 const moonRect = moonButton.getBoundingClientRect();
 
@@ -43,13 +52,77 @@
                         break;
                 }
 
-                if (rocketRect.right > moonRect.left &&
-                    rocketRect.left < moonRect.right &&
-                    rocketRect.bottom > moonRect.top &&
-                    rocketRect.top < moonRect.bottom) {
-                    window.location.href = 'gg.html';
+                checkCollision(rocketRect, moonRect);
+            }
+
+            function handleTouchStart(event) {
+                const firstTouch = event.touches[0];
+                touchStartX = firstTouch.clientX;
+                touchStartY = firstTouch.clientY;
+            }
+
+            function handleTouchMove(event) {
+                if (!touchStartX || !touchStartY) {
+                    return;
                 }
-            });
+
+                const touchEndX = event.touches[0].clientX;
+                const touchEndY = event.touches[0].clientY;
+
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+
+                const rocketRect = rocket.getBoundingClientRect();
+                const moonRect = moonButton.getBoundingClientRect();
+
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX > 0) {
+                        // Swipe left
+                        rocket.style.left = `${rocketRect.left - 10}px`;
+                    } else {
+                        // Swipe right
+                        rocket.style.left = `${rocketRect.right + 10}px`;
+                    }
+                } else {
+                    if (diffY > 0) {
+                        // Swipe up
+                        rocket.style.top = `${rocketRect.top - 10}px`;
+                    } else {
+                        // Swipe down
+                        rocket.style.top = `${rocketRect.top + 10}px`;
+                    }
+                }
+
+                touchStartX = null;
+                touchStartY = null;
+
+                checkCollision(rocketRect, moonRect);
+            }
+
+            function checkCollision(rocketRect, moonRect) {
+                const updatedRocketRect = rocket.getBoundingClientRect();
+
+                if (updatedRocketRect.right > moonRect.left &&
+                    updatedRocketRect.left < moonRect.right &&
+                    updatedRocketRect.bottom > moonRect.top &&
+                    updatedRocketRect.top < moonRect.bottom) {
+                    
+                    // Show explosion animation
+                    explosion.style.display = 'block';
+                    explosion.style.position = 'absolute';
+                    explosion.style.top = `${moonRect.top}px`;
+                    explosion.style.left = `${moonRect.left}px`;
+
+                    // Hide rocket and moon
+                    rocket.style.display = 'none';
+                    moonButton.style.display = 'none';
+
+                    // Redirect after explosion animation
+                    setTimeout(() => {
+                        window.location.href = 'gg.html';
+                    }, 2000); // Adjust the duration to match the explosion animation
+                }
+            }
         });
     </script>
 </body>
