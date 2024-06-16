@@ -37,35 +37,48 @@
             </div>
         </div>
     </div>
-    <audio id="page-audio" src="Y2meta.app - Send This to Your Friend on Their Birthday (320 kbps).mp3"></audio>
-    <audio id="hover-audio" src="spotifydown.com - Just the Way You Are.mp3"></audio>
+    <audio id="hover-audio" src="Y2meta.app - Send This to Your Friend on Their Birthday (320 kbps).mp3"></audio>
+    <audio id="page-audio" src="spotifydown.com - Just the Way You Are.mp3"></audio>
     <script>
-        // Function to play page audio on user interaction
         function playPageAudio() {
             const pageAudio = document.getElementById('page-audio');
             pageAudio.play();
             document.body.removeEventListener('click', playPageAudio);
         }
 
-        // Add event listener for user interaction to play page audio
         document.body.addEventListener('click', playPageAudio);
 
-        // Get hover card and hover audio elements
         const hoverCard = document.getElementById('hover-card');
         const hoverAudio = document.getElementById('hover-audio');
-        const pageAudio = document.getElementById('page-audio');
 
-        // Add event listeners for hover card
         hoverCard.addEventListener('mouseover', () => {
-            pageAudio.pause(); // Pause the page audio
             hoverAudio.play();
+            document.getElementById('page-audio').pause();
+            showCliparts();
         });
 
         hoverCard.addEventListener('mouseout', () => {
             hoverAudio.pause();
             hoverAudio.currentTime = 0;
-            pageAudio.play(); // Resume the page audio
+            hideCliparts();
+            document.getElementById('page-audio').play();
         });
+
+        function showCliparts() {
+            const cliparts = document.querySelectorAll('.clipart');
+            cliparts.forEach((clipart, index) => {
+                setTimeout(() => {
+                    clipart.classList.add('visible');
+                }, index * 2000); // Adjust timing as needed
+            });
+        }
+
+        function hideCliparts() {
+            const cliparts = document.querySelectorAll('.clipart');
+            cliparts.forEach(clipart => {
+                clipart.classList.remove('visible');
+            });
+        }
     </script>
 </body>
 </html>
