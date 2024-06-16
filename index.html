@@ -9,13 +9,47 @@
 <body>
     <div class="container">
         <button id="image-button">
-            <img  src="hh.png" alt="Button Image">
+            <img src="hh.png" alt="Button Image">
         </button>
+        <img id="rocket" src="startup_272357.png" alt="Rocket">
     </div>
-    <h1 align="center"><p>how can be this thing possible?? <br>the day you born every thing was so beautiful like this moon!!!!!<br>Touch that "MOON" </p></h1>
+    <h1 align="center"><p>How can this be possible?? <br>The day you were born everything was so beautiful like this moon!!!!!<br>can you help me to reach that "MOON"</p></h1>
     <script>
-        document.getElementById('image-button').addEventListener('click', () => {
-            window.location.href = 'gg.html';
+        document.addEventListener('DOMContentLoaded', () => {
+            const rocket = document.getElementById('rocket');
+            const moonButton = document.getElementById('image-button');
+
+            rocket.style.position = 'absolute';
+            rocket.style.bottom = '10px';
+            rocket.style.left = '50%';
+            rocket.style.transform = 'translateX(-50%)';
+
+            document.addEventListener('keydown', (event) => {
+                const rocketRect = rocket.getBoundingClientRect();
+                const moonRect = moonButton.getBoundingClientRect();
+
+                switch (event.key) {
+                    case 'ArrowUp':
+                        rocket.style.top = `${rocketRect.top - 10}px`;
+                        break;
+                    case 'ArrowDown':
+                        rocket.style.top = `${rocketRect.top + 10}px`;
+                        break;
+                    case 'ArrowLeft':
+                        rocket.style.left = `${rocketRect.left - 10}px`;
+                        break;
+                    case 'ArrowRight':
+                        rocket.style.left = `${rocketRect.right + 10}px`;
+                        break;
+                }
+
+                if (rocketRect.right > moonRect.left &&
+                    rocketRect.left < moonRect.right &&
+                    rocketRect.bottom > moonRect.top &&
+                    rocketRect.top < moonRect.bottom) {
+                    window.location.href = 'gg.html';
+                }
+            });
         });
     </script>
 </body>
